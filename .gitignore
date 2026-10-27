@@ -107,3 +107,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# FMOD Studio local/cache files (built banks in /Build are committed on purpose)
+/FMOD/**/.cache/
+/FMOD/**/.user/
+/FMOD/**/.unsaved/
