@@ -50,7 +50,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 9217301932736078714}
   cacheVersion: 132096
-  cacheTime: 639287196050735716
+  cacheTime: 639287228293773736
   SerializableEventsDict:
   - key: event:/STRAWBERRY
     index: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
   Path: FMOD/gamejamrenn/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639287196050720373
+  lastModified: 639287228293763736
   FileSizes:
   - Name: Desktop
     Value: 54528
@@ -89,7 +89,7 @@ MonoBehaviour:
   Path: FMOD/gamejamrenn/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639287196050735716
+  lastModified: 639287228293773736
   FileSizes:
   - Name: Desktop
     Value: 784

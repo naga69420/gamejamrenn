@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 149559155}
   - component: {fileID: 149559156}
   - component: {fileID: 149559157}
+  - component: {fileID: 149559158}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -214,9 +215,23 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.019042313, y: -0.13375214}
-  m_Size: {x: 0.11069095, y: 0.28153688}
+  m_Offset: {x: -0.019042313, y: -0.0051439404}
+  m_Size: {x: 0.11069095, y: 0.30626917}
   m_Direction: 0
+--- !u!114 &149559158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149559154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1180d328c903f494c88ed5a354e2713b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+  rb: {fileID: 149559156}
+  speed: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,10 +563,10 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.24, y: 0.34}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
 --- !u!1 &1985423789
