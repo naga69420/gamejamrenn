@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,9 +11,15 @@ public class Player : MonoBehaviour
     public float jumpForce;
     public Vector2 moveInput;
     public int faceDirec = 1;
+    [Header("Check Variables")]
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    private bool isGrounded;
 
     void Update() // Called every frame
     {
+        CheckGrounded();
         Flip();
     }
 
@@ -30,7 +37,15 @@ public class Player : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (value.isPressed && isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+    }
+
+    void CheckGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     void Flip()
@@ -43,5 +58,11 @@ public class Player : MonoBehaviour
             faceDirec = -1;
         }
         transform.localScale = new Vector3(faceDirec, 1, 1);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
