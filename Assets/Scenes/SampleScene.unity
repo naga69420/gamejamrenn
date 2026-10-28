@@ -267,10 +267,14 @@ MonoBehaviour:
   playerInput: {fileID: 149559159}
   speed: 4
   jumpForce: 6
+  jumpCutMultiplier: 0.5
+  normalGravity: 3
+  fallGravity: 5
+  jumpGravity: 1
   moveInput: {x: 0, y: 0}
   faceDirec: 1
   groundCheck: {fileID: 59737517}
-  groundCheckRadius: 0.15
+  groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

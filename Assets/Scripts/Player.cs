@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class Player : MonoBehaviour
     [Header("Movement Variables")]
     public float speed;
     public float jumpForce;
+    public float jumpCutMultiplier = 0.5f;
+    public float normalGravity;
+    public float fallGravity;
+    public float jumpGravity;
+    
     public Vector2 moveInput;
     public int faceDirec = 1;
     [Header("Check Variables")]
@@ -17,8 +23,14 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
     private bool isGrounded;
 
+    private void Start()
+    {
+        rb.gravityScale = normalGravity;
+    }
+
     void Update() // Called every frame
     {
+        ApplyVariableGravity();
         CheckGrounded();
         Flip();
     }
@@ -27,6 +39,27 @@ public class Player : MonoBehaviour
     {
         float targetSpeed = moveInput.x * speed;
         rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
+    }
+
+    void ApplyVariableGravity()
+    {
+        if (rb.linearVelocity.y < -0.1) // for falling
+        {
+            rb.gravityScale = fallGravity;
+        } 
+        else if (rb.linearVelocity.y > 0.1) // for rising
+        {
+            rb.gravityScale = jumpGravity;
+        } 
+        else
+        {
+            rb.gravityScale = normalGravity;
+        }
+    }
+
+    void CheckGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     public void OnMove(InputValue value)
@@ -41,11 +74,13 @@ public class Player : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
-    }
-
-    void CheckGrounded()
-    {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        else
+        {
+            if (rb.linearVelocity.y > 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+            }
+        }
     }
 
     void Flip()
