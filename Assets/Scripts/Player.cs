@@ -5,8 +5,11 @@ using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
+    [Header("Components")]
     public Rigidbody2D rb;
     public PlayerInput playerInput;
+    public Animator anim;
+
     [Header("Movement Variables")]
     public float speed;
     public float jumpForce;
@@ -14,9 +17,14 @@ public class Player : MonoBehaviour
     public float normalGravity;
     public float fallGravity;
     public float jumpGravity;
-    
-    public Vector2 moveInput;
+
     public int faceDirec = 1;
+    
+    //Input Tracking Variables
+    public Vector2 moveInput;
+    private bool jumpPressed;
+    private bool jumpReleased;
+    
     [Header("Check Variables")]
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -29,16 +37,41 @@ public class Player : MonoBehaviour
     }
 
     void Update() // Called every frame
-    {
-        ApplyVariableGravity();
-        CheckGrounded();
+    {   
         Flip();
+        HandleAnimations();
     }
 
     void FixedUpdate()
     {
+        ApplyVariableGravity();
+        CheckGrounded();
+        HandleMovement();
+        HandleJump();
+    }
+
+    private void HandleMovement()
+    {
         float targetSpeed = moveInput.x * speed;
         rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
+    }
+
+    private void HandleJump()
+    {
+        if (jumpPressed && isGrounded) 
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpPressed = false;
+            jumpReleased = false;
+        }
+        if (jumpReleased)
+        {
+            if (rb.linearVelocity.y > 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+            }
+            jumpReleased = false;
+        }
     }
 
     void ApplyVariableGravity()
@@ -62,6 +95,28 @@ public class Player : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
+    void Flip()
+    {
+        if (moveInput.x > 0.1f)
+        {
+            faceDirec = 1;
+        }
+        else if (moveInput.x < -0.1f)
+        {
+            faceDirec = -1;
+        }
+        transform.localScale = new Vector3(faceDirec, 1, 1);
+    }
+
+    void HandleAnimations()
+    {
+        anim.SetBool("isJumping", rb.linearVelocity.y > .1f);
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
+        anim.SetBool("isIdle", Mathf.Abs(moveInput.x) < .1f && isGrounded);
+        anim.SetBool("isWalking", Mathf.Abs(moveInput.x) > .1f && isGrounded);
+    }
+
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -70,29 +125,15 @@ public class Player : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (value.isPressed && isGrounded)
+        if (value.isPressed)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpPressed = true;
+            jumpReleased = false;
         }
         else
         {
-            if (rb.linearVelocity.y > 0)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
-            }
+            jumpReleased = true;
         }
-    }
-
-    void Flip()
-    {
-        if (moveInput.x > 0.1f)
-        {
-            faceDirec = 1;
-        } else if (moveInput.x < -0.1f)
-        {
-            faceDirec = -1;
-        }
-        transform.localScale = new Vector3(faceDirec, 1, 1);
     }
 
     private void OnDrawGizmosSelected()
